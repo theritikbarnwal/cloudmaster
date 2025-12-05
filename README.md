@@ -1,4 +1,4 @@
-# 🔐 Flask Login System with MongoDB & Sessions
+# 🔐 CloudMaster – Flask Login System with MongoDB & Sessions
 
 A clean and minimalistic authentication system built using **Flask** and **MongoDB**, implementing:
 
@@ -37,25 +37,25 @@ login\_db/
 ├── forgot.html
 ├── reset.html
 └── dashboard.html
-└── test_app.py
+└── README.md
 
 ````
 
 ---
 
-## 🚀 Features Overview
+## 🚀 Features
 
 ### 1. **Registration**
-- Stores user credentials in MongoDB with bcrypt-hashed passwords.
+- Securely stores unique users with bcrypt-hashed passwords in MongoDB.
 
 ### 2. **Login**
-- Validates credentials and initiates a session on success.
+- Session-based login using Flask’s secure session management.
 
 ### 3. **Forgot + Reset Password**
-- Allows users to reset their password using username-based identification ➡️ hashed update.
+- Username-based password reset flow with automatic bcrypt hashing.
 
-### 4. **Logout**
-- Clears the session and redirects back to login page.
+### 4. **Secure Environment Variables**
+- Uses .env for database credentials and secret keys.
 
 ---
 
@@ -72,8 +72,8 @@ I wanted a **clean, modular login backend** to use as a foundation for other pro
 ## ⚙️ How to Run Locally
 
 ```bash
-git clone https://github.com/theritikbarnwal/DevOps.git
-cd DevOps/login_db
+git clone https://github.com/theritikbarnwal/cloudmaster.git
+cd DevOps/cloudmaster
 
 python3 -m venv venv
 source venv/bin/activate
@@ -83,9 +83,6 @@ pip install -r requirements.txt
 
 python app.py
 ````
-
-Then visit **[http://127.0.0.1:5000/](http://127.0.0.1:5000/)**
-
 ---
 
 ## ✅ What I Learned

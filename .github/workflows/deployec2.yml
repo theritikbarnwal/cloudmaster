@@ -29,10 +29,10 @@ jobs:
             cd /home/ec2-user/cicd
 
             # Remove old repo 
-            rm -rf AWSblog
+            rm -rf cloudmaster
 
             # Clone fresh repo
-            git clone https://github.com/theritikbarnwal/AWSblog.git
+            git clone https://github.com/theritikbarnwal/cloudmaster.git
             cd AWSblog
 
             # Copy .env from backup
@@ -50,8 +50,8 @@ jobs:
             fi
 
             # Restart service or run manually
-            if systemctl list-units --full -all | grep -Fq 'awsblog.service'; then
-              sudo systemctl restart awsblog.service
+            if systemctl list-units --full -all | grep -Fq 'cloudmaster.service'; then
+              sudo systemctl restart cloudmaster.service
             else
               pkill -f 'python3 app.py' || true
               nohup python3 app.py > flask.log 2>&1 &
