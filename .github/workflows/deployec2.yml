@@ -3,7 +3,7 @@ name: CICD PIPELINE
 on:
   push:
     branches:
-      - main   # 🚀 Change this to your deployment branch if different
+      - main
 
 jobs:
   deploy:
@@ -23,37 +23,29 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@${{ secrets.YOUR_EC2_PUBLIC_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@${{ secrets.YOUR_EC2_PUBLIC_IP }} << 'EOF'
             set -e
-            mkdir -p /home/ec2-user/cicd
-            cd /home/ec2-user/cicd
 
-            # Remove old repo 
+            cd /home/ubuntu
+
+            # Remove old app folder
             rm -rf cloudmaster
 
             # Clone fresh repo
             git clone https://github.com/theritikbarnwal/cloudmaster.git
-            cd AWSblog
+            cd cloudmaster
 
-            # Copy .env from backup
-            cp /home/ec2-user/.env .env
-
-            # Setup venv
-            if [ -d 'venv' ]; then
-              source venv/bin/activate
+            # Activate global venv or create if missing
+            if [ -d "/home/ubuntu/venv" ]; then
+              source /home/ubuntu/venv/bin/activate
               pip install -r requirements.txt
             else
-              python3 -m venv venv
-              source venv/bin/activate
+              python3 -m venv /home/ubuntu/venv
+              source /home/ubuntu/venv/bin/activate
               pip install --upgrade pip
               pip install -r requirements.txt
             fi
 
-            # Restart service or run manually
-            if systemctl list-units --full -all | grep -Fq 'cloudmaster.service'; then
-              sudo systemctl restart cloudmaster.service
-            else
-              pkill -f 'python3 app.py' || true
-              nohup python3 app.py > flask.log 2>&1 &
-            fi
+            # Restart systemd service
+            sudo systemctl restart cloudmaster.service
           EOF
