@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serverless with Lambda - CloudMaster</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        .step-card {
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+            border: 1px solid #e9d5ff;
+        }
+        .code-block {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            color: #e2e8f0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <!-- Navigation -->
+    <nav class="nav-blur fixed w-full z-50 border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-cloud text-3xl text-purple-600 mr-3"></i>
+                    <span class="text-xl font-bold text-gradient">CloudMaster</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/welcome" class="text-purple-600 font-medium">Dashboard</a>
+                    <a href="/tutorials" class="text-gray-700 hover:text-purple-600 transition-colors duration-200 font-medium">Tutorials</a>
+                    <a href="/news" class="text-gray-700 hover:text-purple-600 transition-colors duration-200 font-medium">News</a>
+                    <a href="/about" class="text-gray-700 hover:text-purple-600 transition-colors duration-200 font-medium">About</a>
+                    <a href="/contact" class="text-gray-700 hover:text-purple-600 transition-colors duration-200 font-medium">Contact</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button class="flex items-center space-x-2 text-gray-700 hover:text-purple-600 transition-colors">
+                            <i class="fas fa-user-circle text-xl"></i>
+                            <span class="font-medium">{{ user_email }}</span>
+                            <i class="fas fa-chevron-down text-sm"></i>
+                        </button>
+                    </div>
+                    <a href="/logout" class="text-red-600 hover:text-red-700 transition-colors duration-200 font-medium">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient pt-20 pb-16 relative overflow-hidden">
+        <div class="absolute inset-0 bg-white/10"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="mb-6">
+                <i class="fas fa-code text-6xl text-yellow-300 mb-4"></i>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white">
+                Serverless with <span class="text-yellow-300">Lambda</span> ⚡
+            </h1>
+            <p class="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
+                Build and run serverless applications without managing servers using AWS Lambda
+            </p>
+            <div class="flex items-center justify-center space-x-4 text-white/80">
+                <span><i class="fas fa-clock mr-2"></i>4-5 hours</span>
+                <span><i class="fas fa-signal mr-2"></i>Advanced</span>
+                <span><i class="fas fa-tasks mr-2"></i>Hands-on</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Progress Bar -->
+    <section class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <span class="text-sm font-medium text-gray-700">Progress: 0% Complete</span>
+                <div class="w-64 bg-gray-200 rounded-full h-2">
+                    <div class="bg-purple-600 h-2 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Table of Contents -->
+        <div class="bg-purple-50 border border-purple-200 rounded-xl p-6 mb-12">
+            <h2 class="text-2xl font-bold text-purple-900 mb-4 flex items-center">
+                <i class="fas fa-list mr-3"></i>📚 What You'll Learn
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check-circle text-purple-600"></i>
+                    <span>Lambda function creation and deployment</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check-circle text-purple-600"></i>
+                    <span>Event-driven architecture patterns</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check-circle text-purple-600"></i>
+                    <span>Integration with other AWS services</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check-circle text-purple-600"></i>
+                    <span>Performance optimization and monitoring</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check-circle text-purple-600"></i>
+                    <span>Cost optimization strategies</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check-circle text-purple-600"></i>
+                    <span>Best practices and security</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="step-card rounded-2xl p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">1</div>
+                <h2 class="text-3xl font-bold text-gray-900">Understanding Serverless Computing 🌐</h2>
+            </div>
+            <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                Serverless computing allows you to run code without provisioning or managing servers. AWS Lambda automatically runs your code in response to events and automatically manages the underlying compute resources.
+            </p>
+            
+            <div class="bg-white rounded-xl p-6 mb-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>💡 Key Benefits
+                </h3>
+                <ul class="space-y-3 text-gray-700">
+                    <li class="flex items-start">
+                        <i class="fas fa-circle text-purple-600 text-xs mt-2 mr-3"></i>
+                        <span><strong>No Server Management:</strong> AWS handles server provisioning and maintenance</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-circle text-purple-600 text-xs mt-2 mr-3"></i>
+                        <span><strong>Auto-scaling:</strong> Functions scale automatically with demand</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-circle text-purple-600 text-xs mt-2 mr-3"></i>
+                        <span><strong>Pay-per-use:</strong> Only pay for compute time consumed</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-circle text-purple-600 text-xs mt-2 mr-3"></i>
+                        <span><strong>Event-driven:</strong> Execute code in response to events</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                <h4 class="text-lg font-semibold text-blue-800 mb-3 flex items-center">
+                    <i class="fas fa-info-circle text-blue-600 mr-2"></i>ℹ️ Use Cases
+                </h4>
+                <ul class="text-blue-800 space-y-2">
+                    <li>• Real-time file processing</li>
+                    <li>• API endpoints and microservices</li>
+                    <li>• Scheduled tasks and cron jobs</li>
+                    <li>• IoT data processing</li>
+                    <li>• Chatbots and voice assistants</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card rounded-2xl p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">2</div>
+                <h2 class="text-3xl font-bold text-gray-900">Creating Your First Lambda Function 🚀</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-play-circle text-purple-600 mr-2"></i>▶️ Step-by-Step Process
+                    </h3>
+                    <ol class="space-y-4 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-1">1</span>
+                            <span>Navigate to AWS Lambda service in the console</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-1">2</span>
+                            <span>Click "Create function" and choose "Author from scratch"</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-1">3</span>
+                            <span>Enter function name and select runtime (Python 3.9 recommended)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-1">4</span>
+                            <span>Configure execution role with appropriate permissions</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-1">5</span>
+                            <span>Write your function code and configure environment variables</span>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="bg-gray-900 rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-white mb-4 flex items-center">
+                        <i class="fas fa-terminal text-purple-400 mr-2"></i>💻 Sample Python Function
+                    </h4>
+                    <div class="code-block">
+                        <div class="text-green-400">import json</div>
+                        <div class="text-green-400">import boto3</div>
+                        <div class="text-white mt-2">def lambda_handler(event, context):</div>
+                        <div class="text-white ml-4">    # Get the name from the event</div>
+                        <div class="text-white ml-4">    name = event.get('name', 'World')</div>
+                        <div class="text-white ml-4">    </div>
+                        <div class="text-white ml-4">    # Return a greeting</div>
+                        <div class="text-white ml-4">    return {</div>
+                        <div class="text-white ml-8">        'statusCode': 200,</div>
+                        <div class="text-white ml-8">        'body': json.dumps({</div>
+                        <div class="text-white ml-12">            'message': f'Hello, {name}!'</div>
+                        <div class="text-white ml-8">        })</div>
+                        <div class="text-white ml-4">    }</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card rounded-2xl p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">3</div>
+                <h2 class="text-3xl font-bold text-gray-900">Event Sources and Triggers 🎯</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-bolt text-yellow-600 mr-2"></i>⚡ Common Triggers
+                    </h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span><strong>API Gateway:</strong> HTTP/HTTPS requests</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span><strong>S3:</strong> Object creation/deletion</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span><strong>DynamoDB:</strong> Database changes</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span><strong>CloudWatch:</strong> Scheduled events</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-cog text-blue-600 mr-2"></i>⚙️ Configuration
+                    </h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>Set memory allocation (128MB - 10GB)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>Configure timeout (3 seconds - 15 minutes)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>Set environment variables</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>Configure VPC and security groups</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+                <h4 class="text-lg font-semibold text-yellow-800 mb-3 flex items-center">
+                    <i class="fas fa-exclamation-triangle text-yellow-600 mr-2"></i>💡 Pro Tip
+                </h4>
+                <p class="text-yellow-800">
+                    Start with smaller memory allocations and increase as needed. More memory also means more CPU power, which can reduce execution time and potentially lower costs.
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-card rounded-2xl p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">4</div>
+                <h2 class="text-3xl font-bold text-gray-900">Integration with AWS Services 🔗</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-puzzle-piece text-purple-600 mr-2"></i>🧩 Service Integrations
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-3 flex items-center">
+                                <i class="fas fa-database text-blue-600 mr-2"></i>💾 Data Services
+                            </h4>
+                            <ul class="text-sm text-gray-600 space-y-2">
+                                <li>• S3 for file storage</li>
+                                <li>• DynamoDB for NoSQL database</li>
+                                <li>• RDS for relational databases</li>
+                                <li>• ElastiCache for caching</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-3 flex items-center">
+                                <i class="fas fa-network-wired text-green-600 mr-2"></i>🌐 Communication
+                            </h4>
+                            <ul class="text-sm text-gray-600 space-y-2">
+                                <li>• API Gateway for HTTP APIs</li>
+                                <li>• SQS for message queuing</li>
+                                <li>• SNS for notifications</li>
+                                <li>• EventBridge for event routing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-900 rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-white mb-4 flex items-center">
+                        <i class="fas fa-code text-purple-400 mr-2"></i>💻 Integration Example
+                    </h4>
+                    <div class="code-block">
+                        <div class="text-green-400">import boto3</div>
+                        <div class="text-white mt-2">def process_s3_event(event, context):</div>
+                        <div class="text-white ml-4">    s3 = boto3.client('s3')</div>
+                        <div class="text-white ml-4">    dynamodb = boto3.resource('dynamodb')</div>
+                        <div class="text-white ml-4">    </div>
+                        <div class="text-white ml-4">    # Process S3 event</div>
+                        <div class="text-white ml-4">    bucket = event['Records'][0]['s3']['bucket']['name']</div>
+                        <div class="text-white ml-4">    key = event['Records'][0]['s3']['object']['key']</div>
+                        <div class="text-white ml-4">    </div>
+                        <div class="text-white ml-4">    # Store metadata in DynamoDB</div>
+                        <div class="text-white ml-4">    table = dynamodb.Table('file-metadata')</div>
+                        <div class="text-white ml-4">    table.put_item(Item={'file_key': key, 'bucket': bucket})</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step-card rounded-2xl p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">5</div>
+                <h2 class="text-3xl font-bold text-gray-900">Performance and Cost Optimization 💰</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-tachometer-alt text-blue-600 mr-2"></i>🚀 Performance Tips
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-3">Cold Start Optimization</h4>
+                            <ul class="text-sm text-gray-600 space-y-2">
+                                <li>• Use provisioned concurrency</li>
+                                <li>• Keep functions warm with scheduled events</li>
+                                <li>• Minimize dependencies</li>
+                                <li>• Use Lambda layers for common code</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-3">Memory Optimization</h4>
+                            <ul class="text-sm text-gray-600 space-y-2">
+                                <li>• Right-size memory allocation</li>
+                                <li>• Use connection pooling</li>
+                                <li>• Implement caching strategies</li>
+                                <li>• Optimize code execution</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-green-50 border border-green-200 rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-green-800 mb-3 flex items-center">
+                        <i class="fas fa-dollar-sign text-green-600 mr-2"></i>💡 Cost Optimization
+                    </h4>
+                    <ul class="text-green-800 space-y-2">
+                        <li>• Monitor function duration and optimize code</li>
+                        <li>• Use appropriate memory allocation</li>
+                        <li>• Implement efficient error handling</li>
+                        <li>• Use Lambda layers to reduce deployment package size</li>
+                        <li>• Consider using provisioned concurrency for predictable workloads</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="step-card rounded-2xl p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">6</div>
+                <h2 class="text-3xl font-bold text-gray-900">Monitoring and Debugging 🔍</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-chart-line text-blue-600 mr-2"></i>📊 Monitoring Tools
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-3">CloudWatch Metrics</h4>
+                            <ul class="text-sm text-gray-600 space-y-2">
+                                <li>• Invocation count and errors</li>
+                                <li>• Duration and memory usage</li>
+                                <li>• Throttles and concurrent executions</li>
+                                <li>• Custom metrics</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-3">Logging and Tracing</h4>
+                            <ul class="text-sm text-gray-600 space-y-2">
+                                <li>• CloudWatch Logs</li>
+                                <li>• X-Ray for distributed tracing</li>
+                                <li>• Structured logging</li>
+                                <li>• Error tracking and alerting</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-blue-800 mb-3 flex items-center">
+                        <i class="fas fa-bug text-blue-600 mr-2"></i>🐛 Debugging Best Practices
+                    </h4>
+                    <ul class="text-blue-800 space-y-2">
+                        <li>• Use structured logging with consistent format</li>
+                        <li>• Implement proper error handling and logging</li>
+                        <li>• Test functions locally with SAM CLI</li>
+                        <li>• Use environment variables for configuration</li>
+                        <li>• Monitor function performance and optimize bottlenecks</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-white text-center">
+            <h2 class="text-3xl font-bold mb-4">Ready for the Next Step? 🎯</h2>
+            <p class="text-xl mb-6 text-purple-100">
+                You've mastered serverless computing with Lambda! Ready to explore more AWS services?
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/tutorials/ec2" class="bg-white text-purple-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-colors duration-200">
+                    <i class="fas fa-server mr-2"></i>Learn EC2
+                </a>
+                <a href="/tutorials/s3" class="border-2 border-white text-white hover:bg-white hover:text-purple-600 px-6 py-3 rounded-xl font-semibold transition-colors duration-200">
+                    <i class="fas fa-database mr-2"></i>Master S3
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-cloud text-2xl text-purple-400 mr-3"></i>
+                        <span class="text-xl font-bold text-white">CloudMaster</span>
+                    </div>
+                    <p class="text-gray-400">
+                        Your comprehensive AWS learning platform
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Learning</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/tutorials" class="hover:text-purple-400 transition-colors">Tutorials</a></li>
+                        <li><a href="/news" class="hover:text-purple-400 transition-colors">News</a></li>
+                        <li><a href="#" class="hover:text-purple-400 transition-colors">Certifications</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Company</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/about" class="hover:text-purple-400 transition-colors">About</a></li>
+                        <li><a href="/contact" class="hover:text-purple-400 transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-purple-400 transition-colors">Privacy</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="hover:text-purple-400 transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 CloudMaster. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

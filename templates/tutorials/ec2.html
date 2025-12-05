@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started with EC2 - CloudMaster</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        .step-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #e2e8f0;
+        }
+        .code-block {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Courier New', monospace;
+            color: #e2e8f0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <!-- Navigation -->
+    <nav class="nav-blur fixed w-full z-50 border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-cloud text-3xl text-blue-600 mr-3"></i>
+                    <span class="text-xl font-bold text-gradient">CloudMaster</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/welcome" class="text-blue-600 font-medium">Dashboard</a>
+                    <a href="/tutorials" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Tutorials</a>
+                    <a href="/news" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">News</a>
+                    <a href="/about" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">About</a>
+                    <a href="/contact" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Contact</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button class="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-user-circle text-xl"></i>
+                            <span class="font-medium">{{ user_email }}</span>
+                            <i class="fas fa-chevron-down text-sm"></i>
+                        </button>
+                    </div>
+                    <a href="/logout" class="text-red-600 hover:text-red-700 transition-colors duration-200 font-medium">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient pt-20 pb-16 relative overflow-hidden">
+        <div class="absolute inset-0 bg-white/10"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="mb-6">
+                <i class="fas fa-server text-6xl text-yellow-300 mb-4"></i>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white">
+                Getting Started with <span class="text-yellow-300">EC2</span> 🚀
+            </h1>
+            <p class="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
+                Learn how to launch and manage virtual servers in the AWS cloud with Amazon Elastic Compute Cloud
+            </p>
+            <div class="flex items-center justify-center space-x-4 text-white/80">
+                <span><i class="fas fa-clock mr-2"></i>2-3 hours</span>
+                <span><i class="fas fa-signal mr-2"></i>Beginner</span>
+                <span><i class="fas fa-tasks mr-2"></i>Hands-on</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Progress Bar -->
+    <section class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <span class="text-sm font-medium text-gray-700">Progress: 0% Complete</span>
+                <div class="w-64 bg-gray-200 rounded-full h-2">
+                    <div class="bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Table of Contents -->
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-12">
+            <h2 class="text-2xl font-bold text-blue-900 mb-4 flex items-center">
+                <i class="fas fa-list mr-3"></i>📚 What You'll Learn
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check-circle text-green-600"></i>
+                    <span>Understanding EC2 instances and types</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check-circle text-green-600"></i>
+                    <span>Launching your first EC2 instance</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check-circle text-green-600"></i>
+                    <span>Connecting to instances via SSH</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check-circle text-green-600"></i>
+                    <span>Security groups and key pairs</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check-circle text-green-600"></i>
+                    <span>Instance lifecycle management</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-check-circle text-green-600"></i>
+                    <span>Cost optimization strategies</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="step-card rounded-2xl p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">1</div>
+                <h2 class="text-3xl font-bold text-gray-900">Understanding EC2 Basics 🏗️</h2>
+            </div>
+            <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                Amazon EC2 (Elastic Compute Cloud) provides scalable computing capacity in the AWS cloud. Think of it as renting virtual computers that you can configure and use as needed.
+            </p>
+            
+            <div class="bg-white rounded-xl p-6 mb-6">
+                <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>💡 Key Concepts
+                </h3>
+                <ul class="space-y-3 text-gray-700">
+                    <li class="flex items-start">
+                        <i class="fas fa-circle text-blue-600 text-xs mt-2 mr-3"></i>
+                        <span><strong>Instance:</strong> A virtual server in the cloud</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-circle text-blue-600 text-xs mt-2 mr-3"></i>
+                        <span><strong>AMI:</strong> Amazon Machine Image - template for your instance</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-circle text-blue-600 text-xs mt-2 mr-3"></i>
+                        <span><strong>Instance Type:</strong> CPU, memory, storage, and networking capacity</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-circle text-blue-600 text-xs mt-2 mr-3"></i>
+                        <span><strong>Security Group:</strong> Virtual firewall for your instance</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+                <h4 class="text-lg font-semibold text-yellow-800 mb-3 flex items-center">
+                    <i class="fas fa-exclamation-triangle text-yellow-600 mr-2"></i>⚠️ Important Note
+                </h4>
+                <p class="text-yellow-800">
+                    EC2 instances are billed based on usage. Always remember to stop or terminate instances when you're done to avoid unexpected charges!
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card rounded-2xl p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">2</div>
+                <h2 class="text-3xl font-bold text-gray-900">Choosing the Right Instance Type 🎯</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-server text-blue-600 mr-2"></i>💻 General Purpose
+                    </h3>
+                    <p class="text-gray-700 mb-3">Balanced compute, memory, and networking resources</p>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• t3.micro (Free tier eligible)</li>
+                        <li>• m5.large</li>
+                        <li>• m6g.xlarge</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-microchip text-purple-600 mr-2"></i>⚡ Compute Optimized
+                    </h3>
+                    <p class="text-gray-700 mb-3">High-performance processors for compute-intensive workloads</p>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• c5.large</li>
+                        <li>• c6i.xlarge</li>
+                        <li>• c6g.2xlarge</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+                <h4 class="text-lg font-semibold text-blue-800 mb-3 flex items-center">
+                    <i class="fas fa-info-circle text-blue-600 mr-2"></i>ℹ️ Pro Tip
+                </h4>
+                <p class="text-blue-800">
+                    Start with t3.micro for learning and development. It's free tier eligible and perfect for getting familiar with EC2 without incurring costs.
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card rounded-2xl p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">3</div>
+                <h2 class="text-3xl font-bold text-gray-900">Launching Your First Instance 🚀</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-play-circle text-green-600 mr-2"></i>▶️ Step-by-Step Process
+                    </h3>
+                    <ol class="space-y-4 text-gray-700">
+                        <li class="flex items-start">
+                            <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-1">1</span>
+                            <span>Sign in to AWS Console and navigate to EC2 service</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-1">2</span>
+                            <span>Click "Launch Instance" and choose an AMI (Amazon Linux 2 recommended)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-1">3</span>
+                            <span>Select instance type (t3.micro for free tier)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-1">4</span>
+                            <span>Configure security groups (allow SSH access from your IP)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-1">5</span>
+                            <span>Create or select a key pair for SSH access</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3 mt-1">6</span>
+                            <span>Review and launch your instance</span>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="bg-gray-900 rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-white mb-4 flex items-center">
+                        <i class="fas fa-terminal text-green-400 mr-2"></i>💻 SSH Connection Command
+                    </h4>
+                    <div class="code-block">
+                        <div class="text-green-400"># Replace with your key file and instance details</div>
+                        <div class="text-white">ssh -i "your-key.pem" ec2-user@your-instance-public-ip</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-card rounded-2xl p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">4</div>
+                <h2 class="text-3xl font-bold text-gray-900">Security Best Practices 🔒</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-shield-alt text-green-600 mr-2"></i>🛡️ Security Groups
+                    </h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>Only allow necessary ports (22 for SSH, 80/443 for web)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>Restrict access to specific IP addresses</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>Use least privilege principle</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-key text-blue-600 mr-2"></i>🔑 Key Management
+                    </h3>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>Store private keys securely</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>Use different keys for different environments</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                            <span>Rotate keys regularly</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step-card rounded-2xl p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-xl mr-4">5</div>
+                <h2 class="text-3xl font-bold text-gray-900">Cost Optimization 💰</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-white rounded-xl p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                        <i class="fas fa-dollar-sign text-green-600 mr-2"></i>💡 Money-Saving Tips
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-2">Free Tier Benefits</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• 750 hours/month of t3.micro</li>
+                                <li>• 30GB of EBS storage</li>
+                                <li>• 1GB of data transfer</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-2">Cost Control</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Use Spot Instances for non-critical workloads</li>
+                                <li>• Implement auto-scaling policies</li>
+                                <li>• Monitor usage with CloudWatch</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-red-50 border border-red-200 rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-red-800 mb-3 flex items-center">
+                        <i class="fas fa-exclamation-triangle text-red-600 mr-2"></i>🚨 Cost Alert
+                    </h4>
+                    <p class="text-red-800">
+                        Always stop or terminate instances when not in use. Running instances 24/7 can quickly accumulate significant costs!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white text-center">
+            <h2 class="text-3xl font-bold mb-4">Ready for the Next Step? 🎯</h2>
+            <p class="text-xl mb-6 text-blue-100">
+                You've completed the EC2 fundamentals! Ready to explore more AWS services?
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/tutorials/s3" class="bg-white text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-colors duration-200">
+                    <i class="fas fa-database mr-2"></i>Learn S3 Storage
+                </a>
+                <a href="/tutorials/lambda" class="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-xl font-semibold transition-colors duration-200">
+                    <i class="fas fa-code mr-2"></i>Explore Lambda
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-cloud text-2xl text-blue-400 mr-3"></i>
+                        <span class="text-xl font-bold text-white">CloudMaster</span>
+                    </div>
+                    <p class="text-gray-400">
+                        Your comprehensive AWS learning platform
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Learning</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/tutorials" class="hover:text-blue-400 transition-colors">Tutorials</a></li>
+                        <li><a href="/news" class="hover:text-blue-400 transition-colors">News</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Certifications</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Company</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/about" class="hover:text-blue-400 transition-colors">About</a></li>
+                        <li><a href="/contact" class="hover:text-blue-400 transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Privacy</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="hover:text-blue-400 transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 CloudMaster. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

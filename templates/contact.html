@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - CloudMaster</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <!-- Navigation -->
+    <nav class="nav-blur fixed w-full z-50 border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-cloud text-3xl text-blue-600 mr-3"></i>
+                    <span class="text-xl font-bold text-gradient">CloudMaster</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    {% if user_logged_in %}
+                        <a href="/welcome" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Dashboard</a>
+                    {% else %}
+                        <a href="/" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Home</a>
+                    {% endif %}
+                    <a href="/tutorials" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Tutorials</a>
+                    <a href="/news" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">News</a>
+                    <a href="/about" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">About</a>
+                    <a href="/contact" class="text-blue-600 font-medium">Contact</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    {% if user_logged_in %}
+                        <a href="/welcome" class="text-blue-600 font-medium">Dashboard</a>
+                        <a href="/logout" class="text-red-600 hover:text-red-700 transition-colors duration-200 font-medium">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </a>
+                    {% else %}
+                        <a href="/login" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Login</a>
+                        <a href="/register" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors duration-200 font-medium shadow-lg">
+                            Get Started
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-gradient text-white py-16 text-center relative">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-5xl font-bold tracking-tight">📞 Contact Us</h1>
+            <p class="mt-3 text-xl text-white">Get in touch with the CloudMaster team</p>
+        </div>
+    </header>
+
+    <main id="contact" class="max-w-6xl mx-auto my-12 px-4">
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-gray-800 flex items-center"><i class="fas fa-envelope mr-3 text-blue-600"></i> 💬 Reach Out to Us</h2>
+            <p class="mt-4 text-lg text-gray-600 leading-relaxed">Have questions, feedback, or suggestions? We'd love to hear from you! Use the form below or reach out via our contact details.</p>
+        </section>
+
+        <section class="mb-16">
+            <h3 class="text-2xl font-semibold text-gray-800 flex items-center"><i class="fas fa-comment-dots mr-3 text-blue-600"></i> 📝 Contact Form</h3>
+            <form class="mt-6 bg-white rounded-xl shadow-lg p-6 card-hover">
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-700 font-medium">👤 Name</label>
+                    <input type="text" id="name" class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Your Name">
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 font-medium">📧 Email</label>
+                    <input type="email" id="email" class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" placeholder="Your Email">
+                </div>
+                <div class="mb-4">
+                    <label for="message" class="block text-gray-700 font-medium">💭 Message</label>
+                    <textarea id="message" class="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600" rows="5" placeholder="Your Message"></textarea>
+                </div>
+                <button type="submit" class="bg-blue-600 text-white font-medium py-3 px-6 rounded-full hover:bg-blue-700 transition transform hover:scale-105">
+                    <i class="fas fa-paper-plane mr-2"></i> 📤 Send Message
+                </button>
+            </form>
+        </section>
+
+        <section class="mb-16">
+            <h3 class="text-2xl font-semibold text-gray-800 flex items-center"><i class="fas fa-info-circle mr-3 text-blue-600"></i> 📋 Contact Details</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center card-hover">
+                    <i class="fas fa-envelope text-4xl text-blue-600 mb-4"></i>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">📧 Email</h4>
+                    <p class="text-gray-600">support@cloudmaster.com</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center card-hover">
+                    <i class="fas fa-phone text-4xl text-blue-600 mb-4"></i>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">📞 Phone</h4>
+                    <p class="text-gray-600">+1-800-CLOUD-1</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center card-hover">
+                    <i class="fas fa-map-marker-alt text-4xl text-blue-600 mb-4"></i>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">📍 Address</h4>
+                    <p class="text-gray-600">CloudMaster, Cloud City, USA</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-cloud text-2xl text-blue-400 mr-3"></i>
+                        <span class="text-xl font-bold text-white">CloudMaster</span>
+                    </div>
+                    <p class="text-gray-400">
+                        Your comprehensive AWS learning platform
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Learning</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/tutorials" class="hover:text-blue-400 transition-colors">Tutorials</a></li>
+                        <li><a href="/news" class="hover:text-blue-400 transition-colors">News</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Certifications</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Company</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/about" class="hover:text-blue-400 transition-colors">About</a></li>
+                        <li><a href="/contact" class="hover:text-blue-400 transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Privacy</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="hover:text-blue-400 transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 CloudMaster. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

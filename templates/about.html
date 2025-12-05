@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - CloudMaster</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.15);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        .team-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <!-- Navigation -->
+    <nav class="nav-blur fixed w-full z-50 border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-cloud text-3xl text-blue-600 mr-3"></i>
+                    <span class="text-xl font-bold text-gradient">CloudMaster</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    {% if user_logged_in %}
+                        <a href="/welcome" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Dashboard</a>
+                    {% else %}
+                        <a href="/" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Home</a>
+                    {% endif %}
+                    <a href="/tutorials" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Tutorials</a>
+                    <a href="/news" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">News</a>
+                    <a href="/about" class="text-blue-600 font-medium">About</a>
+                    <a href="/contact" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Contact</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    {% if user_logged_in %}
+                        <a href="/welcome" class="text-blue-600 font-medium">Dashboard</a>
+                        <a href="/logout" class="text-red-600 hover:text-red-700 transition-colors duration-200 font-medium">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </a>
+                    {% else %}
+                        <a href="/login" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Login</a>
+                        <a href="/register" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors duration-200 font-medium shadow-lg">
+                            Get Started
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient pt-20 pb-16 relative overflow-hidden">
+        <div class="absolute inset-0 bg-white/10"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="mb-6">
+                <i class="fas fa-info-circle text-6xl text-yellow-300 mb-4"></i>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white">
+                About <span class="text-yellow-300">CloudMaster</span> ℹ️
+            </h1>
+            <p class="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
+                Learn about our mission to democratize AWS education and help developers master cloud computing
+            </p>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold mb-6 text-gray-900">Our Mission 🎯</h2>
+                    <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                        At CloudMaster, we believe that cloud computing knowledge should be accessible to everyone. Our mission is to provide comprehensive, practical, and engaging AWS education that empowers developers, architects, and IT professionals to build amazing cloud solutions.
+                    </p>
+                    <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                        We understand that learning AWS can be overwhelming, which is why we've created a structured learning platform that breaks down complex concepts into digestible, hands-on tutorials.
+                    </p>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-check-circle text-green-600"></i>
+                            <span class="text-gray-700">Free access to basic content</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-check-circle text-green-600"></i>
+                            <span class="text-gray-700">Hands-on practice</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl p-8">
+                        <div class="text-center">
+                            <i class="fas fa-users text-6xl text-blue-600 mb-4"></i>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Join Our Community</h3>
+                            <p class="text-gray-600">Connect with fellow learners and AWS experts</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-gray-900">Our Values 💎</h2>
+                <p class="text-xl text-gray-600">The principles that guide everything we do</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="card-hover team-card p-8 rounded-2xl text-center">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-graduation-cap text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-900">Quality Education 📚</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        We're committed to providing the highest quality AWS education with up-to-date content and best practices.
+                    </p>
+                </div>
+                
+                <div class="card-hover team-card p-8 rounded-2xl text-center">
+                    <div class="w-16 h-16 bg-green-600 rounded-xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-hands-helping text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-900">Community First 🤝</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Building a supportive community where learners can help each other grow and succeed together.
+                    </p>
+                </div>
+                
+                <div class="card-hover team-card p-8 rounded-2xl text-center">
+                    <div class="w-16 h-16 bg-purple-600 rounded-xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-rocket text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-900">Innovation 🚀</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Continuously innovating our learning platform to provide the best possible educational experience.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-gray-900">Meet Our Team 👥</h2>
+                <p class="text-xl text-gray-600">The passionate people behind CloudMaster</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card-hover team-card p-8 rounded-2xl text-center">
+                    <div class="w-24 h-24 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-user text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">Alex Chen</h3>
+                    <p class="text-blue-600 mb-4">Founder & CEO</p>
+                    <p class="text-gray-600 leading-relaxed">
+                        AWS Solutions Architect with 10+ years of experience in cloud computing and education.
+                    </p>
+                </div>
+                
+                <div class="card-hover team-card p-8 rounded-2xl text-center">
+                    <div class="w-24 h-24 bg-gradient-to-br from-green-600 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-user text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">Sarah Johnson</h3>
+                    <p class="text-green-600 mb-4">Head of Content</p>
+                    <p class="text-gray-600 leading-relaxed">
+                        Former AWS trainer with expertise in creating engaging and practical learning materials.
+                    </p>
+                </div>
+                
+                <div class="card-hover team-card p-8 rounded-2xl text-center">
+                    <div class="w-24 h-24 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-user text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">Mike Rodriguez</h3>
+                    <p class="text-purple-600 mb-4">Lead Developer</p>
+                    <p class="text-gray-600 leading-relaxed">
+                        Full-stack developer passionate about building intuitive learning platforms and tools.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-12 text-white">Our Impact 📊</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-white mb-2">50K+</div>
+                    <p class="text-blue-100">Active Learners</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-white mb-2">200+</div>
+                    <p class="text-blue-100">Tutorials Created</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-white mb-2">95%</div>
+                    <p class="text-blue-100">Success Rate</p>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-white mb-2">24/7</div>
+                    <p class="text-blue-100">Support Available</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold mb-6 text-gray-900">Ready to Join Us? 🚀</h2>
+            <p class="text-xl mb-8 text-gray-600">
+                Start your AWS learning journey with CloudMaster today
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                {% if user_logged_in %}
+                    <a href="/welcome" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-colors duration-200 inline-block shadow-xl">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Go to Dashboard
+                    </a>
+                {% else %}
+                    <a href="/register" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-colors duration-200 inline-block shadow-xl">
+                        <i class="fas fa-user-plus mr-2"></i>Create Free Account
+                    </a>
+                {% endif %}
+                <a href="/contact" class="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-4 rounded-xl font-semibold text-lg transition-colors duration-200">
+                    <i class="fas fa-envelope mr-2"></i>Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-cloud text-2xl text-blue-400 mr-3"></i>
+                        <span class="text-xl font-bold text-white">CloudMaster</span>
+                    </div>
+                    <p class="text-gray-400">
+                        Your comprehensive AWS learning platform
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Learning</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/tutorials" class="hover:text-blue-400 transition-colors">Tutorials</a></li>
+                        <li><a href="/news" class="hover:text-blue-400 transition-colors">News</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Certifications</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Company</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/about" class="hover:text-blue-400 transition-colors">About</a></li>
+                        <li><a href="/contact" class="hover:text-blue-400 transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Privacy</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="hover:text-blue-400 transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 CloudMaster. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

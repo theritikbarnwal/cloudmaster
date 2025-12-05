@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Learning Hub - Tutorials</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        .tutorial-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid #e2e8f0;
+        }
+        .login-prompt {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <!-- Navigation -->
+    <nav class="nav-blur fixed w-full z-50 border-b border-gray-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-cloud text-3xl text-blue-600 mr-3"></i>
+                    <span class="text-xl font-bold text-gradient">CloudMaster</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    {% if user_logged_in %}
+                        <a href="/welcome" class="text-blue-600 font-medium">Dashboard</a>
+                    {% else %}
+                        <a href="/" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Home</a>
+                    {% endif %}
+                    <a href="/tutorials" class="text-blue-600 font-medium">Tutorials</a>
+                    <a href="/news" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">News</a>
+                    <a href="/about" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">About</a>
+                    <a href="/contact" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Contact</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    {% if user_logged_in %}
+                        <div class="relative">
+                            <button class="flex items-center space-x-2 text-gray-700 hover:text-blue-600 transition-colors">
+                                <i class="fas fa-user-circle text-xl"></i>
+                                <span class="font-medium">User</span>
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </button>
+                        </div>
+                        <a href="/logout" class="text-red-600 hover:text-red-700 transition-colors duration-200 font-medium">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </a>
+                    {% else %}
+                        <a href="/login" class="text-gray-700 hover:text-blue-600 transition-colors duration-200 font-medium">Login</a>
+                        <a href="/register" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors duration-200 font-medium shadow-lg">
+                            Get Started
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-gradient text-white py-20 text-center relative">
+        <div class="absolute inset-0 bg-white/10"></div>
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="mb-6">
+                <i class="fas fa-book text-6xl text-yellow-300 mb-4"></i>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-6">AWS Tutorials 📚</h1>
+            <p class="mt-3 text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+                Master AWS with our comprehensive step-by-step guides and hands-on tutorials. From beginner to advanced, we've got you covered! 🚀
+            </p>
+        </div>
+    </header>
+
+    <!-- Login Prompt for Non-Authenticated Users -->
+    {% if not user_logged_in %}
+    <section class="bg-white border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="login-prompt rounded-2xl p-8 text-center">
+                <div class="mb-4">
+                    <i class="fas fa-lock text-4xl text-orange-600"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-orange-800 mb-4">🔒 Unlock Premium Tutorials</h2>
+                <p class="text-orange-700 mb-6 text-lg">
+                    Create a free account to access detailed step-by-step tutorials, hands-on exercises, and advanced AWS concepts!
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/register" class="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-xl font-semibold text-lg transition-colors duration-200 shadow-lg">
+                        <i class="fas fa-user-plus mr-2"></i>Create Free Account
+                    </a>
+                    <a href="/login" class="border-2 border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white px-8 py-3 rounded-xl font-semibold text-lg transition-colors duration-200">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main id="tutorials" class="max-w-6xl mx-auto my-12 px-4">
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-gray-800 flex items-center mb-6">
+                <i class="fas fa-graduation-cap mr-3 text-blue-600"></i>🎓 Available Tutorials
+            </h2>
+            <p class="text-lg text-gray-600 leading-relaxed">
+                Explore our comprehensive tutorials to build your AWS skills, from beginner to advanced topics. 
+                {% if not user_logged_in %}
+                    <span class="font-semibold text-blue-600">Create an account to unlock detailed tutorials!</span>
+                {% endif %}
+            </p>
+        </section>
+
+        <!-- Tutorial Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- EC2 Tutorial Card -->
+            <article class="card-hover tutorial-card rounded-2xl shadow-lg p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mr-4">
+                        <i class="fas fa-server text-2xl text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800">Getting Started with EC2 🚀</h3>
+                        <div class="flex items-center space-x-2 mt-1">
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Beginner</span>
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">2-3 hours</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-4 leading-relaxed">
+                    Launch your first EC2 instance with our step-by-step guide. Learn how to set up virtual servers in the cloud with Amazon Elastic Compute Cloud.
+                </p>
+                {% if user_logged_in %}
+                    <a href="/tutorials/ec2" class="inline-block text-blue-600 font-medium hover:text-blue-800 transition-colors mb-3">
+                        Start Learning <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                {% else %}
+                    <div class="bg-gray-100 rounded-lg p-3 mb-3">
+                        <p class="text-sm text-gray-600 text-center">
+                            <i class="fas fa-lock mr-1"></i>Login required
+                        </p>
+                    </div>
+                {% endif %}
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                    <span><i class="fas fa-calendar mr-1"></i>August 20, 2025</span>
+                    <span><i class="fas fa-users mr-1"></i>1.2k learners</span>
+                </div>
+            </article>
+
+            <!-- S3 Tutorial Card -->
+            <article class="card-hover tutorial-card rounded-2xl shadow-lg p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center mr-4">
+                        <i class="fas fa-database text-2xl text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800">Mastering S3 Storage 🗄️</h3>
+                        <div class="flex items-center space-x-2 mt-1">
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Intermediate</span>
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">3-4 hours</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-4 leading-relaxed">
+                    Master Amazon S3 to store and retrieve data efficiently. This guide covers creating buckets, managing permissions, and advanced features.
+                </p>
+                {% if user_logged_in %}
+                    <a href="/tutorials/s3" class="inline-block text-green-600 font-medium hover:text-green-800 transition-colors mb-3">
+                        Start Learning <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                {% else %}
+                    <div class="bg-gray-100 rounded-lg p-3 mb-3">
+                        <p class="text-sm text-gray-600 text-center">
+                            <i class="fas fa-lock mr-1"></i>Login required
+                        </p>
+                    </div>
+                {% endif %}
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                    <span><i class="fas fa-calendar mr-1"></i>August 15, 2025</span>
+                    <span><i class="fas fa-users mr-1"></i>856 learners</span>
+                </div>
+            </article>
+
+            <!-- Lambda Tutorial Card -->
+            <article class="card-hover tutorial-card rounded-2xl shadow-lg p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mr-4">
+                        <i class="fas fa-code text-2xl text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800">Serverless with Lambda ⚡</h3>
+                        <div class="flex items-center space-x-2 mt-1">
+                            <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">Advanced</span>
+                            <span class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full">4-5 hours</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-4 leading-relaxed">
+                    Go serverless with AWS Lambda. Learn how to run code without managing servers and explore practical use cases.
+                </p>
+                {% if user_logged_in %}
+                    <a href="/tutorials/lambda" class="inline-block text-purple-600 font-medium hover:text-purple-800 transition-colors mb-3">
+                        Start Learning <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                {% else %}
+                    <div class="bg-gray-100 rounded-lg p-3 mb-3">
+                        <p class="text-sm text-gray-600 text-center">
+                            <i class="fas fa-lock mr-1"></i>Login required
+                        </p>
+                    </div>
+                {% endif %}
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                    <span><i class="fas fa-calendar mr-1"></i>August 10, 2025</span>
+                    <span><i class="fas fa-users mr-1"></i>623 learners</span>
+                </div>
+            </article>
+
+            <!-- Coming Soon Tutorials -->
+            <article class="card-hover tutorial-card rounded-2xl shadow-lg p-6 opacity-75">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-gray-400 rounded-xl flex items-center justify-center mr-4">
+                        <i class="fas fa-clock text-2xl text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-600">DynamoDB Deep Dive 🗃️</h3>
+                        <div class="flex items-center space-x-2 mt-1">
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Coming Soon</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-500 mb-4 leading-relaxed">
+                    Master NoSQL database design and management with Amazon DynamoDB. Learn about tables, indexes, and best practices.
+                </p>
+                <div class="bg-gray-100 rounded-lg p-3 mb-3">
+                    <p class="text-sm text-gray-500 text-center">
+                        <i class="fas fa-clock mr-1"></i>Coming Soon
+                    </p>
+                </div>
+                <div class="flex items-center justify-between text-sm text-gray-400">
+                    <span><i class="fas fa-calendar mr-1"></i>September 2025</span>
+                    <span><i class="fas fa-users mr-1"></i>Pre-register</span>
+                </div>
+            </article>
+
+            <article class="card-hover tutorial-card rounded-2xl shadow-lg p-6 opacity-75">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-indigo-400 rounded-xl flex items-center justify-center mr-4">
+                        <i class="fas fa-network-wired text-2xl text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-600">VPC & Networking 🌐</h3>
+                        <div class="flex items-center space-x-2 mt-1">
+                            <span class="text-xs bg-indigo-100 text-indigo-600 px-2 py-1 rounded-full">Coming Soon</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-500 mb-4 leading-relaxed">
+                    Understand AWS networking fundamentals with Virtual Private Cloud (VPC), subnets, security groups, and routing.
+                </p>
+                <div class="bg-gray-100 rounded-lg p-3 mb-3">
+                    <p class="text-sm text-gray-500 text-center">
+                        <i class="fas fa-clock mr-1"></i>Coming Soon
+                    </p>
+                </div>
+                <div class="flex items-center justify-between text-sm text-gray-400">
+                    <span><i class="fas fa-calendar mr-1"></i>September 2025</span>
+                    <span><i class="fas fa-users mr-1"></i>Pre-register</span>
+                </div>
+            </article>
+
+            <article class="card-hover tutorial-card rounded-2xl shadow-lg p-6 opacity-75">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-pink-400 rounded-xl flex items-center justify-center mr-4">
+                        <i class="fas fa-shield-alt text-2xl text-white"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-600">AWS Security Best Practices 🔒</h3>
+                        <div class="flex items-center space-x-2 mt-1">
+                            <span class="text-xs bg-pink-100 text-pink-600 px-2 py-1 rounded-full">Coming Soon</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-gray-500 mb-4 leading-relaxed">
+                    Learn essential security practices for AWS including IAM, encryption, monitoring, and compliance requirements.
+                </p>
+                <div class="bg-gray-100 rounded-lg p-3 mb-3">
+                    <p class="text-sm text-gray-500 text-center">
+                        <i class="fas fa-clock mr-1"></i>Coming Soon
+                    </p>
+                </div>
+                <div class="flex items-center justify-between text-sm text-gray-400">
+                    <span><i class="fas fa-calendar mr-1"></i>October 2025</span>
+                    <span><i class="fas fa-users mr-1"></i>Pre-register</span>
+                </div>
+            </article>
+        </div>
+
+        <!-- Learning Path Section -->
+        <section class="mt-20">
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white text-center">
+                <h2 class="text-3xl font-bold mb-4">🎯 Recommended Learning Path</h2>
+                <p class="text-xl mb-8 text-blue-100">
+                    Follow our structured learning path to master AWS step by step
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    {% if user_logged_in %}
+                        <a href="/tutorials/ec2" class="bg-white text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-colors duration-200">
+                            <i class="fas fa-play mr-2"></i>Start with EC2
+                        </a>
+                    {% else %}
+                        <a href="/register" class="bg-white text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-colors duration-200">
+                            <i class="fas fa-user-plus mr-2"></i>Create Account
+                        </a>
+                    {% endif %}
+                    <a href="/news" class="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-xl font-semibold transition-colors duration-200">
+                        <i class="fas fa-newspaper mr-2"></i>Read AWS News
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-cloud text-2xl text-blue-400 mr-3"></i>
+                        <span class="text-xl font-bold text-white">CloudMaster</span>
+                    </div>
+                    <p class="text-gray-400">
+                        Your comprehensive AWS learning platform
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Learning</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/tutorials" class="hover:text-blue-400 transition-colors">Tutorials</a></li>
+                        <li><a href="/news" class="hover:text-blue-400 transition-colors">News</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Certifications</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Company</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="/about" class="hover:text-blue-400 transition-colors">About</a></li>
+                        <li><a href="/contact" class="hover:text-blue-400 transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition-colors">Privacy</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="#" class="hover:text-blue-400 transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 CloudMaster. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

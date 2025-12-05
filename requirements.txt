@@ -1,0 +1,7 @@
+Flask
+pymongo[srv]
+dnspython
+python-dotenv
+Werkzeug
+pytest
+coverage
